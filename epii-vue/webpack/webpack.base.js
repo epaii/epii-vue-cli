@@ -1,10 +1,17 @@
 const path = require('path')
+const fs = require('fs')
 const htmlWebpackPlugin = require("html-webpack-plugin")
 const VueLoaderPlugin = require("vue-loader/lib/plugin")
 const work_dir = process.cwd();
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
  const deldir = require("../tools/deldir.js");
+ const merger = require("webpack-merge")
  deldir(work_dir+"/runtime");
+
+ const webpack_config_file = path.resolve(work_dir+"/config/webpack.config.js");
+ let webpack_config = {};
+ if (fs.existsSync(webpack_config_file))
+     webpack_config = require(webpack_config_file);
 
  
 const getConfig = (app_page_type) => {
@@ -15,7 +22,7 @@ const getConfig = (app_page_type) => {
         m_page = require(__dirname + "/../tools/mpa/pages.js");
     }
     const pages = m_page.getPages();
-    return {
+    return merger({
         entry: pages.entries,
         output: {
             filename: "js[name].[hash:8].js",
@@ -83,9 +90,8 @@ const getConfig = (app_page_type) => {
 
             }
         }
-    }
+    },webpack_config);
 
 }
-
 
 module.exports = getConfig;
