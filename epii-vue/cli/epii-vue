@@ -1,0 +1,43 @@
+#! /usr/bin/env node
+// -*- js -*-
+
+if(process.argv.length==3){
+  if(process.argv[2]==="init"){
+      require("../tools/copydir.js")(__dirname+"/../project-example",process.cwd());
+      return;
+  }
+  
+}
+
+
+const WebpackDevServer = require("webpack-dev-server");
+var webpack = require("webpack");
+const type = process.argv.indexOf("build") > 0 ? "production" : "location";
+const config = require(__dirname + "/../webpack/webpack." + type + ".js");
+const fs = require("fs");
+
+if (type === "location") {
+  var compiler = webpack(config);
+  var server = new WebpackDevServer(compiler, config.devServer);
+  var portfinder = require('portfinder');
+  portfinder.basePort = 8800;
+  portfinder.getPort(function (err, port) {
+    server.listen(port);
+  });
+ 
+}else{
+  var compiler = webpack(config, (err, res) => {
+    if (err || res.hasErrors()) {
+      console.log("构建过程出错！" + res);
+    } else {
+      console.log("构建成功！");
+      let onbuid_file = process.cwd()+"/hooks/build.js";
+      if(fs.existsSync(onbuid_file)){
+         let build_mod = require(onbuid_file);
+         if(typeof build_mod === "function"){
+           build_mod();
+         }
+      }
+    }
+  });
+}
