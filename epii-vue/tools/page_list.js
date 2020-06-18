@@ -33,7 +33,9 @@ let getpages = (path_reg) => {
 
             });
             glob.sync(page_dir + page_uri+`pages/${page}/childrens/*.vue`).forEach(function (sub_page_file) {
+                if(!item.hasOwnProperty("childrens"))
                 item["childrens"]={};
+                
                 let sub_name_all = path.basename(sub_page_file).toLowerCase();
                 let sub_page_name = sub_name_all.replace(".vue", "");
                 let sub_item = { name: sub_page_name, path: sub_page_file.replace(/\\/g, "/") };
