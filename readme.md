@@ -38,3 +38,9 @@ epii-vue-cli build --mpa
 ```
 epii-vue-cli build 
 ``` 
+
+异步加载
+
+```
+epii-vue-cli --dynamic-import 
+``` 

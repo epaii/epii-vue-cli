@@ -17,7 +17,7 @@ let getEntries = () => {
         chunks: [page]
     }));
 
-   
+     
     create_router(page_list,work_dir+"/runtime/spa_router.js")
     return {
         entries: entries,

@@ -1,9 +1,6 @@
 
 import Vue from 'vue'
-import root from './root.vue'
 import router from './router'
-
-
 (async () => {
 
     try {
@@ -13,8 +10,21 @@ import router from './router'
     } catch (e) {
 
     }
+    try {
+        const on_router = require("@project/hooks/router.js")
+        if (typeof on_boot.default == "function")
+            router = await on_boot.default(router);
+        else router = on_router;
+    } catch (error) {
+        
+    }
+    let root = null;
+    try {
+        root = require("@project/hooks/App.vue").default
 
-
+    } catch (e) {
+        root = require("./root.vue").default;
+    }
     Vue.config.productionTip = false
     Vue.config.devtools = true
     Vue.___app = (new Vue({
