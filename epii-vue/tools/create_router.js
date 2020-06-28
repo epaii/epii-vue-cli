@@ -25,7 +25,7 @@ module.exports = (pages, tofile, is_async) => {
         if (is_warp)
             routes.push(`routes.push({path:"/",component:${item.var_name}})`)
         else
-            routes.push(`routes.push({path:"${item.name}.html",component:${item.var_name}})`)
+            routes.push(`routes.push({path:"${item.name}.html",name:"${item.name}.html",component:${item.var_name}})`)
 
         _route_index++;
         if (haschilds) {
@@ -35,7 +35,7 @@ module.exports = (pages, tofile, is_async) => {
                 if (is_warp)
                     routes.push(`routes[${_route_index}].children.push({path:"/children/${index_c}",component:${item.var_name}_childrens_${sub_item.name}})`)
                 else
-                    routes.push(`routes[${_route_index}].children.push({path:"${item.name}.html/children/${index_c}",component:${item.var_name}_childrens_${sub_item.name}})`)
+                    routes.push(`routes[${_route_index}].children.push({path:"children/${index_c}",component:${item.var_name}_childrens_${sub_item.name}})`)
             }
         }
 
