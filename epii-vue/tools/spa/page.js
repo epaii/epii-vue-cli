@@ -16,9 +16,11 @@ let getEntries = () => {
         filename: page + ".html",
         chunks: [page]
     }));
-
-     
-    create_router(page_list,work_dir+"/runtime/spa_router.js")
+    let pages_list_tmp = page_list.getPages();
+   
+     create_router(pages_list_tmp,work_dir+"/runtime/spa_router.js")
+  
+    
     return {
         entries: entries,
         htmlPlugins: htmls

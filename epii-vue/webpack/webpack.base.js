@@ -14,15 +14,17 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
      webpack_config = require(webpack_config_file);
 
  
-const getConfig = (app_page_type) => {
+let getConfig = (app_page_type) => {
     let m_page = null
     if (app_page_type === "spa")
         m_page = require(__dirname + "/../tools/spa/page.js");
     else {
         m_page = require(__dirname + "/../tools/mpa/pages.js");
     }
+    getConfig.getPages = m_page.getPages;
     const pages = m_page.getPages();
     return merger({
+        
         entry: pages.entries,
         output: {
             filename: "js[name].[hash:8].js",
@@ -93,5 +95,5 @@ const getConfig = (app_page_type) => {
     },webpack_config);
 
 }
-
+ 
 module.exports = getConfig;

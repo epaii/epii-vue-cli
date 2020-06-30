@@ -3,7 +3,7 @@ const path = require("path")
  
 const work_dir = process.cwd();
 const page_dir = path.resolve(work_dir + "/src").replace(/\\/g,"/");
-
+let callback_list = [];
 let getpages = (path_reg) => {
     let pages = {};
     glob.sync(path_reg).forEach(function (page_file) {
@@ -54,4 +54,21 @@ let getpages = (path_reg) => {
  
 let pages = getpages(page_dir + "/**/pages/*/*.vue");
  
-module.exports =pages ;
+module.exports ={
+    watch(callback){
+        if(callback) {
+            callback(pages);
+            callback_list.push(callback);
+        } 
+    },
+    getPages(){
+        return pages;
+    },
+    check(){
+        let pages_tmp = getpages(page_dir + "/**/pages/*/*.vue");
+        if(JSON.stringify(pages)!= JSON.stringify(pages_tmp)){
+            pages = pages_tmp;
+            callback_list.forEach(fun=>fun(pages));
+        }
+    }
+} ;

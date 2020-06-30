@@ -3,6 +3,7 @@ const merger = require("webpack-merge")
 const work_dir = process.cwd();
 const loc_dir = path.resolve(work_dir+'/dev');
 const webpack = require("webpack")
+const autoRouter = require('../plugin/auto-route.js');
 let config = {};
 const fs = require("fs");
 let config_file = path.resolve(work_dir+ "/config/config.development.js");
@@ -24,6 +25,7 @@ module.exports = merger( require(path.resolve(__dirname, "webpack.base"))(proces
         path: loc_dir
     },
     plugins: [
+        new autoRouter(),
         new webpack.DefinePlugin({
             'APP_CONFIG': JSON.stringify(config)
         }),

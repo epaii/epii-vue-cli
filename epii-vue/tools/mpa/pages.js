@@ -61,11 +61,13 @@ let getEntries = () => {
     
     }
 
-
-    for(let index in page_list){
-        let item = page_list[index];
-        create_one_page(item,"",page_dir) 
-    }
+     let pages_list_tmp = page_list.getPages();
+        for(let index in pages_list_tmp){
+            let item = pages_list_tmp[index];
+            create_one_page(item,"",page_dir) 
+        }
+   
+   
 
 
 
