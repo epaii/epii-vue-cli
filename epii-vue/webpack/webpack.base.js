@@ -4,16 +4,16 @@ const htmlWebpackPlugin = require("html-webpack-plugin")
 const VueLoaderPlugin = require("vue-loader/lib/plugin")
 const work_dir = process.cwd();
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
- const deldir = require("../tools/deldir.js");
- const merger = require("webpack-merge")
- deldir(work_dir+"/runtime");
+const deldir = require("../tools/deldir.js");
+const merger = require("webpack-merge")
+deldir(work_dir + "/runtime");
 
- const webpack_config_file = path.resolve(work_dir+"/config/webpack.config.js");
- let webpack_config = {};
- if (fs.existsSync(webpack_config_file))
-     webpack_config = require(webpack_config_file);
+const webpack_config_file = path.resolve(work_dir + "/config/webpack.config.js");
+let webpack_config = {};
+if (fs.existsSync(webpack_config_file))
+    webpack_config = require(webpack_config_file);
 
- 
+
 let getConfig = (app_page_type) => {
     let m_page = null
     if (app_page_type === "spa")
@@ -24,12 +24,12 @@ let getConfig = (app_page_type) => {
     getConfig.getPages = m_page.getPages;
     const pages = m_page.getPages();
     return merger({
-        
+
         entry: pages.entries,
         output: {
             filename: "js[name].[hash:8].js",
             publicPath: '/',
-            path: path.resolve(work_dir+'/dist/'+app_page_type),
+            path: path.resolve(work_dir + '/dist/' + app_page_type),
 
         },
         module: {
@@ -72,7 +72,11 @@ let getConfig = (app_page_type) => {
                     },
                 },
 
+            },{
+                test: /\.svg/,
+                use: ['file-loader']
             }
+
             ]
         },
         plugins: [
@@ -80,20 +84,20 @@ let getConfig = (app_page_type) => {
             ...pages.htmlPlugins
         ],
         resolveLoader: {
-            modules: [path.resolve(__dirname, '../../node_modules'),path.resolve(work_dir+'/node_modules')]
+            modules: [path.resolve(__dirname, '../../node_modules'), path.resolve(work_dir + '/node_modules')]
         },
         resolve: {
-            modules: [path.resolve(work_dir+'/node_modules'),path.resolve(__dirname, '../../node_modules')],
-            extensions: ['.vue', ".js",".ts"],
+            modules: [path.resolve(work_dir + '/node_modules'), path.resolve(__dirname, '../../node_modules')],
+            extensions: ['.vue', ".js", ".ts"],
             alias: {
                 'vue$': path.resolve(__dirname, '../../node_modules/vue/dist/vue.js'),
-                '@page': path.resolve(work_dir+ '/src/pages'),
+                '@page': path.resolve(work_dir + '/src/pages'),
                 '@project': path.resolve(work_dir)
 
             }
         }
-    },webpack_config);
+    }, webpack_config);
 
 }
- 
+
 module.exports = getConfig;
