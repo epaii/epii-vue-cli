@@ -12,9 +12,9 @@ import router from './router'
     }
     try {
         const on_router = require("@project/hooks/router.js")
-        if (typeof on_boot.default == "function")
-            router = await on_boot.default(router);
-        else router = on_router;
+        if (typeof on_router.default == "function")
+             await on_router.default(router);
+        else router = on_router.default;
     } catch (error) {
         
     }
