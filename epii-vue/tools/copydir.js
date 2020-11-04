@@ -4,7 +4,7 @@ var stat = fs.stat;
 var copy = function (src, dst) {
 
     fs.readdir(src, function (err, paths) {
-      
+
         if (err) {
             throw err;
         }
@@ -17,14 +17,15 @@ var copy = function (src, dst) {
                 if (err) {
                     throw err;
                 }
-                if (st.isFile()) { 
-                    if(!fs.existsSync(_dst))
-                    {
-                        readable = fs.createReadStream(_src);
-                        writable = fs.createWriteStream(_dst);
-                        readable.pipe(writable);
+                if (st.isFile()) {
+                    if (fs.existsSync(_dst)) {
+                        fs.unlinkSync(_dst)
                     }
-                  
+                    readable = fs.createReadStream(_src);
+                    writable = fs.createWriteStream(_dst);
+                    readable.pipe(writable);
+
+
                 } else if (st.isDirectory()) {
                     exists(_src, _dst, copy);
                 }
