@@ -35,7 +35,7 @@ const runner = {
   dev() {
     const config = require(__dirname + "/../webpack/webpack.location.js");
     var compiler = webpack(config);
-
+    console.log(config.devServer)
     var server = new WebpackDevServer(compiler, config.devServer);
     var portfinder = require('portfinder');
     portfinder.basePort = 8800;

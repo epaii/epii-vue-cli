@@ -1,3 +1,4 @@
+module.paths.push(...module.parent.paths)
 const webpack = require("webpack");
 module.exports = {
   plugins: [
