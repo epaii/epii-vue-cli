@@ -31,6 +31,13 @@ export default {
 				token: Eapp.localData.get("token"),
 			});
 		}
+		Vue.mixin({
+			data: function () {
+				return {
+					api: {}
+				}
+			}
+		});
 		Vue.prototype.show = function() {
 			let djs = setInterval(() => {
 				if (this.$children.length > 0) {

@@ -15,6 +15,13 @@
 			timeout: {
 				type: Number,
 				default: 5000
+			},
+			postApi:{
+				type:String,
+				default:null
+			},
+			postData:{
+
 			}
 		},
 		data() {
@@ -24,6 +31,7 @@
 			};
 		},
 		mounted() {
+			 
 			setTimeout(() => {
 				if (this.show_loading) {
 					this.show_loading = true;
@@ -34,6 +42,14 @@
 			setTimeout(() => {
 				this.show();
 			}, this.timeout);
+
+			 
+			if(this.postApi){
+				Eapp.http.post(this.postApi,Object.assign(this.$route.query,this.postData), ret=>{
+					 this.$parent.api = ret
+					 this.$parent.show();
+				})
+			}
 		},
 		methods: {
 			show() {
