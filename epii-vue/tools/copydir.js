@@ -3,35 +3,32 @@ var stat = fs.stat;
 
 var copy = function (src, dst) {
 
-    fs.readdir(src, function (err, paths) {
+    let paths = fs.readdirSync(src);
 
-        if (err) {
-            throw err;
-        }
-        paths.forEach(function (path) {
-            var _src = src + '/' + path;
-            var _dst = dst + '/' + path;
-            var readable;
-            var writable;
-            stat(_src, function (err, st) {
-                if (err) {
-                    throw err;
+    paths.forEach(function (path) {
+        var _src = src + '/' + path;
+        var _dst = dst + '/' + path;
+        var readable;
+        var writable;
+        stat(_src, function (err, st) {
+            if (err) {
+                throw err;
+            }
+            if (st.isFile()) {
+                if (fs.existsSync(_dst)) {
+                    fs.unlinkSync(_dst)
                 }
-                if (st.isFile()) {
-                    if (fs.existsSync(_dst)) {
-                        fs.unlinkSync(_dst)
-                    }
-                    readable = fs.createReadStream(_src);
-                    writable = fs.createWriteStream(_dst);
-                    readable.pipe(writable);
+                readable = fs.createReadStream(_src);
+                writable = fs.createWriteStream(_dst);
+                readable.pipe(writable);
 
 
-                } else if (st.isDirectory()) {
-                    exists(_src, _dst, copy);
-                }
-            });
+            } else if (st.isDirectory()) {
+                exists(_src, _dst, copy);
+            }
         });
     });
+
 }
 
 var exists = function (src, dst, callback) {
