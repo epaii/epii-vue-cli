@@ -11,6 +11,7 @@ import router from './router'
 
     }
     try {
+        
         const on_router = require("@project/hooks/router.js")
         if (typeof on_router.default == "function")
              await on_router.default(router);

@@ -2,10 +2,8 @@ import Vue from "vue";
 import configBase from '../config/config.base'
 import configDev from '../config/config.development'
 import configPro from '../config/config.production'
-import epiiLoading from './components/epii-loading/loading.vue'
 export default {
 	install() {
-		Vue.component('epii-loading', epiiLoading)
  		Eapp.initialize({
 			vue: Vue
 		});

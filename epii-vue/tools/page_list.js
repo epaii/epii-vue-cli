@@ -5,8 +5,12 @@ const work_dir = process.cwd();
 const page_dir = path.resolve(work_dir + "/src").replace(/\\/g,"/");
 let callback_list = [];
 let getpages = (path_reg) => {
+
     let pages = {};
     glob.sync(path_reg).forEach(function (page_file) {
+
+
+
 
         let file_name_all = path.basename(page_file),
             page_dir_name = path.basename(path.dirname(page_file)),
@@ -42,6 +46,8 @@ let getpages = (path_reg) => {
                 item["childrens"][sub_page_name] = sub_item;
 
             });
+
+            
            
             pages[item["name"]] = item;
 

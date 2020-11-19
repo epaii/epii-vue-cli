@@ -12,5 +12,8 @@
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
+	},
+	"easycom": {
+		"epii-(.*)": "@/epii/components/epii-$1/$1.vue"
 	}
 }

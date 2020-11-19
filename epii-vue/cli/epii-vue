@@ -72,7 +72,7 @@ const runner = {
           }
          
           fs.writeFileSync(process.cwd() + "/package.json", JSON.stringify(pdata))
-          console.log("Init Success，It is need run npm install")
+          console.log("Init Success，Get started with the following commands:\n run npm install")
         }, 100);
 
       }
