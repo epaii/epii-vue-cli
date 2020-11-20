@@ -10,11 +10,27 @@ function readline() {
     process.stdin.resume();
     process.stdin.on('data', function (data) {
       process.stdin.pause(); // stops after one line reads
-      resolve(data.replace(/\r\n/g,"").replace("\n",""));
+      resolve(data.replace(/\r\n/g, "").replace("\n", ""));
     });
   });
 }
 const runner = {
+  async pull() {
+    await this.dopull();
+    console.log("success");
+  },
+  async dopull() {
+    return new Promise((ok, error) => {
+      console.log("download example project from repo");
+      var download = require('download-git-repo');
+      download('epaii/epii-vue-cli-project-example', __dirname + '/../project-example', function (err) {
+        if(err)
+         console.log('Error'+err);
+         else ok();
+      })
+    })
+
+  },
   build() {
     const config = require(__dirname + "/../webpack/webpack.production.js");
     var compiler = webpack(config, (err, res) => {
@@ -44,6 +60,7 @@ const runner = {
     });
   },
   init: async function () {
+    await this.dopull();
     let pfile = process.cwd() + "/package.json";
     if (fs.existsSync(pfile)) {
       console.log("检测到已经存在项目了");
@@ -65,12 +82,12 @@ const runner = {
         setTimeout(() => {
           let pdata = JSON.parse(fs.readFileSync(process.cwd() + "/package.json"));
           pdata.dependencies["eapp-h5-plus-vue"] = "latest";
-          copy(__dirname + "/../project-example/2",process.cwd())
+          copy(__dirname + "/../project-example/2", process.cwd())
           if (leixing == 3) {
             pdata.dependencies["eapp-vue-yitiji"] = "latest";
-            copy(__dirname + "/../project-example/3",process.cwd())
+            copy(__dirname + "/../project-example/3", process.cwd())
           }
-         
+
           fs.writeFileSync(process.cwd() + "/package.json", JSON.stringify(pdata))
           console.log("Init Success，Get started with the following commands:\n run npm install")
         }, 100);
