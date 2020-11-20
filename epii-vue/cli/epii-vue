@@ -14,7 +14,7 @@ function readline() {
     });
   });
 }
-const runner = {
+let runner = {
   async pull() {
     await this.dopull();
     console.log("success");
@@ -23,7 +23,7 @@ const runner = {
     return new Promise((ok, error) => {
       console.log("download example project from repo");
       var download = require('download-git-repo');
-      download('epaii/epii-vue-cli-project-example', __dirname + '/../project-example', function (err) {
+      download('epaii/epii-vue-cli-project-example#master', __dirname + '/../project-example',function (err) {
         if(err)
          console.log('Error'+err);
          else ok();
@@ -51,7 +51,7 @@ const runner = {
   dev() {
     const config = require(__dirname + "/../webpack/webpack.location.js");
     var compiler = webpack(config);
-    console.log(config.devServer)
+    
     var server = new WebpackDevServer(compiler, config.devServer);
     var portfinder = require('portfinder');
     portfinder.basePort = 8800;
@@ -66,44 +66,18 @@ const runner = {
       console.log("检测到已经存在项目了");
       return;
     }
-    console.log(
-      "请选择项目模板\n" +
-      "1、epii-vue 项目\n" +
-      "2、epii-vue 带Eapp 项目\n" +
-      "3、epii-vue 带一体机版本的Eapp 项目\n" +
-      "4、uniapp 带Eapp 项目"
-    );
-    let leixing = await readline();
-
-    if ((leixing == 1 || leixing == 2 || leixing == 3)) {
-
-      copy(__dirname + "/../project-example/1", process.cwd());
-      if (leixing == 2 || leixing == 3) {
-        setTimeout(() => {
-          let pdata = JSON.parse(fs.readFileSync(process.cwd() + "/package.json"));
-          pdata.dependencies["eapp-h5-plus-vue"] = "latest";
-          copy(__dirname + "/../project-example/2", process.cwd())
-          if (leixing == 3) {
-            pdata.dependencies["eapp-vue-yitiji"] = "latest";
-            copy(__dirname + "/../project-example/3", process.cwd())
-          }
-
-          fs.writeFileSync(process.cwd() + "/package.json", JSON.stringify(pdata))
-          console.log("Init Success，Get started with the following commands:\n run npm install")
-        }, 100);
-
-      }
-    } else if (leixing == 4) {
-      require("../tools/copydir.js")(__dirname + "/../project-example/4", process.cwd());
-      console.log("Init Success，It is need run \n npm install \n open this dir from hbuilderx")
-    }
+    let init = require(__dirname+"/../project-example/init.js");
+    await init(copy,fs,readline);
   }
 }
 
+let runner_other = __dirname+"/../project-example/cli.js";
+if(fs.existsSync(runner_other))
+{
+  require(runner_other)(runner);
+}
 
-
-
-
+ 
 if (process.argv.length > 2) {
 
   if (runner.hasOwnProperty(process.argv[2])) {
