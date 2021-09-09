@@ -16,11 +16,7 @@ let getEntries = () => {
         filename: page + ".html",
         chunks: [page]
     }));
-    let pages_list_tmp = page_list.getPages();
-   
-     create_router(pages_list_tmp,work_dir+"/runtime/spa_router.js")
-  
-    
+
     return {
         entries: entries,
         htmlPlugins: htmls
@@ -28,7 +24,15 @@ let getEntries = () => {
 
 }
  
-module.exports = {
-    getPages: getEntries
+page_list.watch((_pages)=>{
+    create_router(_pages,work_dir+"/runtime/spa_router.js")
+})
+create_router(page_list.getPages(),work_dir+"/runtime/spa_router.js")
 
+
+
+
+module.exports = {
+    getPages: getEntries,
+    onFileChange:page_list.watch
 }

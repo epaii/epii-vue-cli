@@ -1,11 +1,17 @@
 const path = require('path')
-const merger = require("webpack-merge")
+const merger = require("webpack-merge").merge
 const work_dir = process.cwd();
 let config = {};
 const fs = require("fs");
+let config_base_file = path.resolve(work_dir + "/config/config.base.js");
 const config_file = path.resolve(work_dir+ "/config/config.production.js");
 if (fs.existsSync(config_file))
     config = require(config_file);
+
+    if (fs.existsSync(config_base_file)) {
+        config = Object.assign(require(config_base_file), config);
+    }
+    
 
 const {
     CleanWebpackPlugin
@@ -16,7 +22,7 @@ let webpack_config = {};
 if (fs.existsSync(webpack_config_file))
     webpack_config = require(webpack_config_file);
 
-module.exports = merger(require(path.resolve(__dirname, "webpack.base"))(process.argv.indexOf("--mpa") > 0 ? "mpa" : "spa"), {
+module.exports = merger(require(path.resolve(__dirname, "webpack.base")), {
 
     mode: "production",
 

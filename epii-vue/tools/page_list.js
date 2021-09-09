@@ -1,80 +1,106 @@
 const glob = require("glob");
 const path = require("path")
- 
+const fs = require("fs");
 const work_dir = process.cwd();
-const page_dir = path.resolve(work_dir + "/src").replace(/\\/g,"/");
+const page_dir = path.resolve(work_dir + "/src").replace(/\\/g, "/");
 let callback_list = [];
-let getpages = (path_reg) => {
+let _pages = {};
 
+
+
+function walkSync(currentDirPath, callback) {
+
+    fs.readdirSync(currentDirPath).forEach(function (name) {
+        var filePath = path.join(currentDirPath, name);
+        var stat = fs.statSync(filePath);
+        if (stat.isFile()) {
+            callback(filePath, stat);
+        } else if (stat.isDirectory()) {
+            walkSync(filePath, callback);
+        }
+    });
+}
+
+function endwith(string, find) {
+    // console.log(string.indexOf(find))
+    return string.indexOf(find) >= 0;
+}
+
+
+//目录格式的兼容
+let getpages = (page_root) => {
+  
     let pages = {};
-    glob.sync(path_reg).forEach(function (page_file) {
+    walkSync(page_root, function (filePath, stat) {
 
+        page_root = page_root.replace(/\\/g, "/");
+        if (!endwith(filePath, ".vue")) {
+            return;
+        }
+        filePath = filePath.replace(/\\/g, "/");
+        let page_uri = filePath.replace(page_root, "").replace(/\\/g, "/");
+       // console.log(page_uri);
+        let path_split = page_uri.split("/");
+        let l = path_split.length;
+        var obj = pages;
+        for (let i = 0; i < l; i++) {
 
-
-
-        let file_name_all = path.basename(page_file),
-            page_dir_name = path.basename(path.dirname(page_file)),
-            file_ext = path.extname(page_file);
-        if (file_name_all === page_dir_name + file_ext) {
-            page_file =page_file.replace(/\\/g,"/");
-            let page_uri = page_file.replace(page_dir,"").replace(`pages/${page_dir_name}/${page_dir_name}.vue`,"");
-            let enport = page_uri+page_dir_name;
-            let page =   page_dir_name;
-            let item = {};
-            item["page_name"]=page_dir_name;
-            item["name"] = enport.toLowerCase();
-            item["path"] = page_file.replace(/\\/g, "/");
-            item["pages_path"] = page_dir+page_uri+"pages";
-            item["components"] = {};
-            item["var_name"]= enport.replace(/\//g,"_epii_")
-            item["pages"] = {};
- 
-            glob.sync(page_dir + page_uri+`pages/${page}/page-components/*.vue`).forEach(function (sub_page_file) {
-                let sub_name_all = path.basename(sub_page_file).toLowerCase();
-                let sub_page_name = sub_name_all.replace(".vue", "");
-                let sub_item = { name: sub_page_name, path: sub_page_file.replace(/\\/g, "/") };
-                item["components"][sub_page_name] = sub_item;
-
-            });
-            glob.sync(page_dir + page_uri+`pages/${page}/childrens/*.vue`).forEach(function (sub_page_file) {
-                if(!item.hasOwnProperty("childrens"))
-                item["childrens"]={};
-                
-                let sub_name_all = path.basename(sub_page_file).toLowerCase();
-                let sub_page_name = sub_name_all.replace(".vue", "");
-                let sub_item = { name: sub_page_name, path: sub_page_file.replace(/\\/g, "/") };
-                item["childrens"][sub_page_name] = sub_item;
-
-            });
-
-            
-           
-            pages[item["name"]] = item;
-
-
+            let tmp_0 = path_split[i];
+            if (tmp_0.length == 0) {
+                continue;
+            }
+            if (endwith(tmp_0, "-children")) {
+                //console.log(obj)
+                let tmp_1 = tmp_0.replace("-children", "");
+                if (!obj.hasOwnProperty(tmp_1)) {
+                    obj[tmp_1] = { children: {}, name: tmp_1, ok: false };
+                } else {
+                    if (!obj[tmp_1].hasOwnProperty("children")) {
+                        obj[tmp_1].children = {};
+                    }
+                }
+                obj = obj[tmp_1].children;
+            } else if (endwith(tmp_0, ".vue")) {
+                let tmp_1 = tmp_0.replace(".vue", "");
+                if (!obj.hasOwnProperty(tmp_1)) {
+                    obj[tmp_1] = {};
+                }
+                obj[tmp_1].name = tmp_1;
+                obj[tmp_1].ok = true;
+                obj[tmp_1].path = page_uri.replace(/-children/g,".html").replace(".vue",".html")
+                let importname = page_uri.replace(/-children/g,"_children").replace(".vue","").replace(/\//g,"__");
+                obj[tmp_1].component = "__var__"+importname+"__var__";
+                obj[tmp_1].filePath =  filePath;
+                obj[tmp_1].importVarName =  importname;
+            } else {
+                continue;
+            }
         }
 
     });
-    return pages;
+   // console.log(JSON.stringify(pages).replace(/\"__var__/g,"").replace(/__var__\"/g,""));
+   return pages;
 }
- 
-let pages = getpages(page_dir + "/**/pages/*/*.vue");
- 
-module.exports ={
-    watch(callback){
-        if(callback) {
-            callback(pages);
-            callback_list.push(callback);
-        } 
-    },
-    getPages(){
-        return pages;
-    },
-    check(){
-        let pages_tmp = getpages(page_dir + "/**/pages/*/*.vue");
-        if(JSON.stringify(pages)!= JSON.stringify(pages_tmp)){
-            pages = pages_tmp;
-            callback_list.forEach(fun=>fun(pages));
-        }
+
+let reg_string = page_dir + "/pages";
+_pages = getpages(reg_string);
+
+
+setInterval(() => {
+    let pages_tmp = getpages(reg_string);
+    if (JSON.stringify(pages_tmp)!= JSON.stringify(_pages)) {
+        _pages = pages_tmp;
+        callback_list.forEach(fun => fun(_pages));
     }
-} ;
+}, 2000);
+
+module.exports = {
+    watch(callback) {
+        if (callback) {
+            callback_list.push(callback);
+        }
+    },
+    getPages() {
+        return _pages;
+    }
+};

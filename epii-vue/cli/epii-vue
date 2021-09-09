@@ -23,7 +23,7 @@ let runner = {
     return new Promise((ok, error) => {
       console.log("download example project from repo");
       var download = require('download-git-repo');
-      download('epaii/epii-vue-cli-project-example#master', __dirname + '/../project-example',function (err) {
+      download('epaii/epii-vue-cli-project-example#vue3', __dirname + '/../project-example',function (err) {
         if(err)
          console.log('Error'+err);
          else ok();
@@ -61,6 +61,10 @@ let runner = {
   },
   init: async function () {
     await this.dopull();
+     await this.initfromlocal();
+  },
+  initfromlocal: async function () {
+    
     let pfile = process.cwd() + "/package.json";
     if (fs.existsSync(pfile)) {
       console.log("检测到已经存在项目了");
