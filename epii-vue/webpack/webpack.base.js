@@ -82,25 +82,24 @@ let config = merger({
                 use: [
                     'style-loader',
                     'css-loader',
-                    'less-loader',
                     {
                         loader: 'px2rem-loader',
                         options: {
                             remUnit: build_config.remUnit,
                             remPrecision: 8
                         }
-                    }
+                    },'less-loader'
                 ]
             },
             {
                 test: /\.scss$/,
-                use: ['style-loader', 'css-loader', 'sass-loader', {
+                use: ['style-loader', 'css-loader', {
                     loader: 'px2rem-loader',
                     options: {
                         remUnit: build_config.remUnit,
                         remPrecision: 8
                     }
-                }]
+                },'sass-loader']
             }
 
         ]
