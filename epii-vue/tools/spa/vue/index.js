@@ -37,7 +37,7 @@
              await on_router.default(router);
         else router = on_router.default;
     } catch (error) {
-        
+        router.addRoute({path: '/',redirect: '/root.html',name: '主页'});
     }
 
   app.use(router);
