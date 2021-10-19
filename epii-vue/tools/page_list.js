@@ -51,7 +51,9 @@ let getpages = (page_root) => {
             }
             if (endwith(tmp_0, "-children")) {
                 //console.log(obj)
-                let tmp_1 = tmp_0.replace("-children", "");
+                let tmp_1 = page_uri.substring(0,page_uri.indexOf("-children"))+".html";//tmp_0.replace("-children", "");
+              
+                //console.log(tmp_1);
                 if (!obj.hasOwnProperty(tmp_1)) {
                     obj[tmp_1] = { children: {}, name: tmp_1, ok: false };
                 } else {
@@ -61,11 +63,12 @@ let getpages = (page_root) => {
                 }
                 obj = obj[tmp_1].children;
             } else if (endwith(tmp_0, ".vue")) {
-                let tmp_1 = tmp_0.replace(".vue", "");
+                let tmp_1 = page_uri.replace(/-children/g,".html").replace(".vue",".html");
+                 
                 if (!obj.hasOwnProperty(tmp_1)) {
                     obj[tmp_1] = {};
                 }
-                obj[tmp_1].name = tmp_1;
+                obj[tmp_1].name =tmp_1;// tmp_0.replace(".vue", "");
                 obj[tmp_1].ok = true;
                 obj[tmp_1].path = page_uri.replace(/-children/g,".html").replace(".vue",".html")
                 let importname = page_uri.replace(/-children/g,"_children").replace(".vue","").replace(/\//g,"__");
@@ -78,6 +81,7 @@ let getpages = (page_root) => {
         }
 
     });
+   // console.log(pages);
    // console.log(JSON.stringify(pages).replace(/\"__var__/g,"").replace(/__var__\"/g,""));
    return pages;
 }
