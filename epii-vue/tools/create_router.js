@@ -14,7 +14,7 @@ module.exports = (pages, tofile, is_async) => {
             let item = itemObject[key];
             if(!item.ok) continue;
             imports.push({name:item.importVarName,path:item.filePath});
-            let newItem = {name:item.name,path:item.path,component:item.component};
+            let newItem = {name:item.path,path:item.path,component:item.component};
             if(item.hasOwnProperty("children")){
                 newItem.children=[];
                 doMakeRouter(item.children,newItem.children);
