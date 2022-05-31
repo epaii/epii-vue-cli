@@ -52,7 +52,7 @@ let config = merger({
             },
             {
                 // 打包图片
-                test: /\.(jpg|png|gif)$/,
+                test: /\.(jpe?g|png|gif)$/,
                 use: {
                     // loader: 'file-loader',
                     loader: 'url-loader',
@@ -63,6 +63,7 @@ let config = merger({
                         esModule: false,
                     },
                 },
+                type: 'javascript/auto'
             },
             { // 处理字体
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
