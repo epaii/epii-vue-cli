@@ -32,12 +32,14 @@ import router from './router'
         } else {
             router.addRoute({ path: '/', redirect: '/root.html', name: '主页' });
         }
+        if (on_router.default) {
+            if (typeof on_router.default == "function")
+                await on_router.default(router);
+            else router = on_router.default;
+        }
 
-        if (typeof on_router.default == "function")
-            await on_router.default(router);
-        else router = on_router.default;
     } catch (error) {
-
+        router.addRoute({ path: '/', redirect: '/root.html', name: '主页' });
     }
 
     app.use(router);
