@@ -1,9 +1,9 @@
 
- 
- import {createApp} from 'vue'
- import router from './router'
+
+import { createApp } from 'vue'
+import router from './router'
 (async () => {
-      let root = null;
+    let root = null;
     try {
         root = require("@project/hooks/App.vue").default
     } catch (e) {
@@ -12,9 +12,9 @@
         } catch (e) {
             root = require("./root.vue").default;
         }
-        
+
     }
-  
+
     const app = createApp(root)
     app.___app = app.config.globalProperties;
     try {
@@ -25,21 +25,21 @@
         //console.log("not find boot")
     }
     try {
-        
+
         const on_router = require("@project/hooks/router.js")
-        if(on_router && on_router.root){
-            router.addRoute({path: '/',redirect: on_router.root,name: '主页'});
-        }else{
-            router.addRoute({path: '/',redirect: '/root.html',name: '主页'});
+        if (on_router && on_router.root) {
+            router.addRoute({ path: '/', redirect: on_router.root, name: '主页' });
+        } else {
+            router.addRoute({ path: '/', redirect: '/root.html', name: '主页' });
         }
-     
+
         if (typeof on_router.default == "function")
-             await on_router.default(router);
+            await on_router.default(router);
         else router = on_router.default;
     } catch (error) {
-        
+
     }
 
-  app.use(router);
-  app.mount('#root')
+    app.use(router);
+    app.mount('#root')
 })();
