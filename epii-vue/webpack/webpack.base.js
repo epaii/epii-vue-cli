@@ -30,7 +30,7 @@ let config = merger({
     entry: pagesManger.entries,
     output: {
         filename: "js[name].[chunkhash:8].js",
-        publicPath: '/',
+        publicPath: '',
         path: path.resolve(work_dir + '/dist/' + buildType.getBuildType()),
 
     },
