@@ -21,9 +21,11 @@ let runner = {
   },
   async dopull() {
     return new Promise((ok, error) => {
-      console.log("download example project from repo");
+      console.log("download example project from repo gitee");
       var download = require('download-git-repo');
-      download('epaii/epii-vue-cli-project-example#vue3', __dirname + '/../project-example',function (err) {
+      //epaii/epii-vue-cli-project-example#vue3
+      //direct:https://gitee.com/epii/epii-vue-cli-project-example.git#vue3
+      download('direct:https://gitee.com/epii/epii-vue-cli-project-example.git#vue3', __dirname + '/../project-example',{clone: true},function (err) {
         if(err)
          console.log('Error'+err);
          else ok();
