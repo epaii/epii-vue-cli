@@ -1,10 +1,6 @@
 {
   "name": "epii-vue3-cli",
-<<<<<<< HEAD
   "version": "0.1.4",
-=======
-  "version": "0.1.2",
->>>>>>> 4c84378da51a9b9f0b01d4dcf2322d24682dcc94
   "description": "A simple vue cli of spa and mpa",
   "main": "",
   "bin": {
