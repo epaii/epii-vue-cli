@@ -25,7 +25,12 @@ let runner = {
       var download = require('download-git-repo');
       //epaii/epii-vue-cli-project-example#vue3
       //direct:https://gitee.com/epii/epii-vue-cli-project-example.git#vue3
-      download('direct:https://gitee.com/epii/epii-vue-cli-project-example.git#vue3', __dirname + '/../project-example',{clone: true},function (err) {
+      let _path = __dirname + '/../project-example';
+      if (fs.existsSync(_path)) {
+          fs.rmSync(_path,{force:true,recursive:true})
+      }
+      
+      download('direct:https://gitee.com/epii/epii-vue-cli-project-example.git#vue3', _path,{clone: true},function (err) {
         if(err)
          console.log('Error'+err);
          else ok();
