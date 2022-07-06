@@ -6,7 +6,8 @@ const {
 const work_dir = process.cwd();
 const deldir = require("../tools/deldir.js");
 const merger = require("webpack-merge").merge
-
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCssAssetsWebpackPlugin = require("optimize-css-assets-webpack-plugin");
 deldir(work_dir + "/runtime");
 
 const webpack_config_file = path.resolve(work_dir + "/config/webpack.config.js");
@@ -26,10 +27,10 @@ if(fs.existsSync(config_base_file)){
 
  
 let config = merger({
-
+    devtool:false,
     entry: pagesManger.entries,
     output: {
-        filename: "js[name].[chunkhash:8].js",
+        filename: "js/[name].[chunkhash:8].js",
         publicPath: '',
         path: path.resolve(work_dir + '/dist/' + buildType.getBuildType()),
 
@@ -42,7 +43,7 @@ let config = merger({
             },
             {
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader', {
+                use: [MiniCssExtractPlugin.loader, 'css-loader', {//'style-loader'
                     loader: 'px2rem-loader',
                     options: {
                         remUnit: build_config.remUnit,
@@ -106,6 +107,11 @@ let config = merger({
         ]
     },
     plugins: [
+        new OptimizeCssAssetsWebpackPlugin(),
+        new MiniCssExtractPlugin({
+            filename: 'css/[name].css'
+            // 输出的css文件名不变的意思
+        }),
         new VueLoaderPlugin(),
         ...pagesManger.htmlPlugins
     ],

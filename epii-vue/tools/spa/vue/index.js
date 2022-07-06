@@ -22,7 +22,7 @@ import router from './router'
         if (typeof on_boot.default == "function")
             await on_boot.default(app);
     } catch (e) {
-        //console.log("not find boot")
+        console.log("error in  boot:",e)
     }
     try {
 
@@ -44,4 +44,7 @@ import router from './router'
 
     app.use(router);
     app.mount('#root')
+    if (window.getTopHtmlHandler) {
+        window.getTopHtmlHandler().stopLoading();
+    }
 })();

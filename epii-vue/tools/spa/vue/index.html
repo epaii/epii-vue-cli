@@ -12,7 +12,27 @@
 </head>
 
 <body>
-    <div id="root"></div>
+    <div id="root" style="display: none"></div>
+    <div id="__epii_page_loading__">
+        <%= htmlWebpackPlugin.options.loadingContent %>
+    </div>
+    <script>
+        let __top__html_handler = {
+            rootNode:document.getElementById("root"),
+            loadingNode:document.getElementById("__epii_page_loading__"),
+            stopLoading(){
+                this.rootNode.style.display = "block";
+                this.loadingNode.style.display = "none";
+            },
+            startLoading(){
+                this.rootNode.style.display = "none";
+                this.loadingNode.style.display = "block";
+            }
+        }
+        function getTopHtmlHandler(){
+            return __top__html_handler;
+        }
+    </script>
 </body>
 
 </html>

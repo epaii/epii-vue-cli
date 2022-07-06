@@ -1,5 +1,6 @@
 const path = require('path')
 const merger = require("webpack-merge").merge
+
 const work_dir = process.cwd();
 let config = {};
 const fs = require("fs");
@@ -25,7 +26,7 @@ if (fs.existsSync(webpack_config_file))
 module.exports = merger(require(path.resolve(__dirname, "webpack.base")), {
 
     mode: "production",
-
+    devtool: false,
     plugins: [
         new CleanWebpackPlugin({
             cleanOnceBeforeBuildPatterns: ["images", "*.js", "*.LICENSE", ".html"]
@@ -34,5 +35,27 @@ module.exports = merger(require(path.resolve(__dirname, "webpack.base")), {
             'APP_CONFIG': JSON.stringify(config)
         })
 
-    ]
+    ],
+    optimization: {
+        splitChunks: {
+          // 分割所有类型的 chunk
+          chunks: 'all',
+          maxSize:200000,
+          cacheGroups: {
+            vendors: {
+              name: `chunk-vendors`,
+              test: /[\\/]node_modules[\\/]/,
+              priority: -10,
+              chunks: 'initial'
+            },
+            common: {
+              name: `chunk-common`,
+              minChunks: 2,
+              priority: -20,
+              chunks: 'initial',
+              reuseExistingChunk: true
+            }
+          }
+        }
+      }
 },webpack_config);
