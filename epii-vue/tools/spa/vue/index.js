@@ -44,7 +44,7 @@ import router from './router'
 
     app.use(router);
     app.mount('#root')
-    if (window.getTopHtmlHandler) {
-        window.getTopHtmlHandler().stopLoading();
+    if (window.getAppHandler) {
+        window.getAppHandler().stopLoading();
     }
 })();

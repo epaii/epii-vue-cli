@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -7,31 +7,44 @@
     <meta http-equiv="Expires" content="0" />
     <meta charset="UTF-8">
     <title></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=0">
     <meta name="referrer" content="never">
+ 
+    <style>
+        #__epii_page_loading__{
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            /* border: 1px solid red; */
+            justify-content: center;
+            align-items: center;
+          
+        }
+    </style>
 </head>
 
-<body>
+<body style="margin: 0;padding:0">
     <div id="root" style="display: none"></div>
+
     <div id="__epii_page_loading__">
         <%= htmlWebpackPlugin.options.loadingContent %>
     </div>
-    <script>
-        let __top__html_handler = {
-            rootNode:document.getElementById("root"),
-            loadingNode:document.getElementById("__epii_page_loading__"),
-            stopLoading(){
-                this.rootNode.style.display = "block";
-                this.loadingNode.style.display = "none";
+    <script>let __top__html_handler = {
+            rootNode: document.getElementById("root"),
+            loadingNode: document.getElementById("__epii_page_loading__"),
+            stopLoading() {
+                //   this.rootNode.style.display = "block";
+                //  this.loadingNode.style.display = "none";
             },
-            startLoading(){
+            startLoading() {
                 this.rootNode.style.display = "none";
                 this.loadingNode.style.display = "block";
             }
         }
-        function getTopHtmlHandler(){
+        function getAppHandler() {
             return __top__html_handler;
         }
+    
     </script>
 </body>
 

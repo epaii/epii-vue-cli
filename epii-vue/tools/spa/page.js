@@ -10,16 +10,19 @@ let getEntries = () => {
     let htmls = [];
 
     let page = "index";
+    let loadingHtml = `<span  style="margin-top: -10vh;  font-size: 24px;">系统加载中</span>`;
     let html_file = vue_tpl_dir + "/index.html";
     if(fs.existsSync(work_dir+"/hooks/index.html")){
         html_file = work_dir+"/hooks/index.html";
     }else  if(fs.existsSync(work_dir+"/hooks/template.html")){
         html_file = work_dir+"/hooks/template.html";
+    }else{
+        if(fs.existsSync(work_dir+"/hooks/loading.html")){
+            loadingHtml =  fs.readFileSync(work_dir+"/hooks/loading.html");
+        }
     }
-    let loadingHtml = "加载中";
-    if(fs.existsSync(work_dir+"/hooks/loading.html")){
-        loadingHtml =  fs.readFileSync(work_dir+"/hooks/loading.html");
-    }
+    
+
 
     entries[page] = vue_tpl_dir + `/index.js`
     htmls.push(new HtmlWebpackPlugin({
