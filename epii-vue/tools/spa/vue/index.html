@@ -9,16 +9,16 @@
     <title></title>
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=0">
     <meta name="referrer" content="never">
- 
+
     <style>
-        #__epii_page_loading__{
+        #__epii_page_loading__ {
             width: 100vw;
             height: 100vh;
             display: flex;
             /* border: 1px solid red; */
             justify-content: center;
             align-items: center;
-          
+
         }
     </style>
 </head>
@@ -26,25 +26,39 @@
 <body style="margin: 0;padding:0">
     <div id="root" style="display: none"></div>
 
-    <div id="__epii_page_loading__">
+    <div id="__epii_page_loading__" style="display: none;">
         <%= htmlWebpackPlugin.options.loadingContent %>
     </div>
-    <script>let __top__html_handler = {
+    <script>
+        let __top__html_handler = {
+            loadingTag: false,
+            isLoading: false,
             rootNode: document.getElementById("root"),
             loadingNode: document.getElementById("__epii_page_loading__"),
             stopLoading() {
-                //   this.rootNode.style.display = "block";
-                //  this.loadingNode.style.display = "none";
+                this.loadingTag = false;
+                this.rootNode.style.display = "block";
+                this.loadingNode.style.display = "none";
+                this.isLoading = false;
             },
             startLoading() {
-                this.rootNode.style.display = "none";
-                this.loadingNode.style.display = "block";
+                if (this.isLoading) return;
+                this.loadingTag = true;
+                setTimeout(() => {
+                    if (!this.loadingTag) return;
+                    this.rootNode.style.display = "none";
+                    this.loadingNode.style.display = "block";
+                    this.isLoading = true;
+                }, 400);
+
             }
         }
         function getAppHandler() {
             return __top__html_handler;
         }
-    
+        getAppHandler().startLoading();
+
+
     </script>
 </body>
 
