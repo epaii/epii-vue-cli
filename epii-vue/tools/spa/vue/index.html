@@ -33,13 +33,19 @@
         let __top__html_handler = {
             loadingTag: false,
             isLoading: false,
+            loadingStartTime: 0,
             rootNode: document.getElementById("root"),
             loadingNode: document.getElementById("__epii_page_loading__"),
             stopLoading() {
                 this.loadingTag = false;
                 this.rootNode.style.display = "block";
-                this.loadingNode.style.display = "none";
-                this.isLoading = false;
+                if (this.isLoading) {
+                    setTimeout(() => {
+                        this.loadingNode.style.display = "none";
+                        this.isLoading = false;
+                    }, Math.max(0, 1000 - (new Date().getTime() - this.loadingStartTime)));
+                }
+
             },
             startLoading() {
                 if (this.isLoading) return;
@@ -49,6 +55,7 @@
                     this.rootNode.style.display = "none";
                     this.loadingNode.style.display = "block";
                     this.isLoading = true;
+                    this.loadingStartTime = new Date().getTime();
                 }, 400);
 
             }
