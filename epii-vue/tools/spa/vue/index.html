@@ -11,10 +11,11 @@
     <meta name="referrer" content="never">
 
     <style>
-        #__epii_page_loading__ {
+        .__page-loading {
             width: 100vw;
             height: 100vh;
             display: flex;
+            flex-direction: column;
             /* border: 1px solid red; */
             justify-content: center;
             align-items: center;
@@ -27,7 +28,9 @@
     <div id="root" style="display: none"></div>
 
     <div id="__epii_page_loading__" style="display: none;">
-        <%= htmlWebpackPlugin.options.loadingContent %>
+        <div class="__page-loading">
+            <%= htmlWebpackPlugin.options.loadingContent %>
+        </div>
     </div>
     <script>
         let __top__html_handler = {
@@ -56,7 +59,7 @@
                     this.loadingNode.style.display = "block";
                     this.isLoading = true;
                     this.loadingStartTime = new Date().getTime();
-                }, 500);
+                },500);
 
             }
         }
