@@ -80,9 +80,12 @@ let runner = {
     let init = require(__dirname+"/../project-example/init.js");
     await init(copy,fs,readline);
   },
-  version:function(params) {
+  version:function() {
     let packageInfo = require(__dirname+"/../../package.json");
     console.log('v'+packageInfo.version);
+  },
+  v:function() {
+    this.version();
   }
 }
 
