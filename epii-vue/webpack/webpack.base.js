@@ -87,6 +87,15 @@ let getConfig = (app_page_type) => {
             {
                 test: /\.scss$/,
                 use: ['style-loader', 'css-loader', 'sass-loader']
+            },
+            {
+                test: /\.(mp3|mp4)$/,
+                loader: 'url-loader',
+                options: {
+                    name: 'audios/[name].[ext]',
+                    limit: 10,
+                    esModule: false,
+                }
             }
 
             ]
