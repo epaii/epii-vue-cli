@@ -20,7 +20,7 @@ import router from './router'
     try {
         const on_boot = require("@project/hooks/boot.js")
         if (typeof on_boot.default == "function")
-            await on_boot.default(app);
+            await on_boot.default(app,router);
     } catch (e) {
         console.log("error in  boot:",e)
     }
@@ -42,6 +42,7 @@ import router from './router'
         router.addRoute({ path: '/', redirect: '/root.html', name: '主页' });
     }
 
+    console.log(router.getRoutes(),"xxxxxxxxxxxx");
     app.use(router);
     app.mount('#root')
     if (window.getAppHandler) {
