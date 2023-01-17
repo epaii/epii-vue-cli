@@ -104,7 +104,7 @@ let config = merger({
             }, 'sass-loader']
         },
         {
-            test: /\.(mp3|mp4)$/,
+            test: /\.(mp3|mp4|wav)$/,
             loader: 'url-loader',
             options: {
                 name: 'audios/[name].[ext]',
